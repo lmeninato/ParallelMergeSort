@@ -43,9 +43,9 @@ package body Msort is
         end if;
     end mergesort;
 
-    procedure sort(Arr: in out t_Array; low: Index; high: Index) is
+    procedure sort(Arr: in out t_Array) is
     begin
-        mergesort(Arr, low, high);
+        mergesort(Arr, Arr'First, Arr'Last);
     end sort;
 
     function merge(Left: t_Array; Right: t_Array) return t_Array is
