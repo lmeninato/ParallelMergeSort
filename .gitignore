@@ -1,0 +1,4 @@
+*.ali
+*.o
+.DS_Store
+main

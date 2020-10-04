@@ -1,0 +1,10 @@
+#!/bin/bash
+
+for i in {1..5}
+do
+    python3 generate_rand.py > rand.txt
+    ./main < rand.txt > sorted.txt
+    python3 check_sorted.py < sorted.txt
+done
+rm rand.txt
+rm sorted.txt
