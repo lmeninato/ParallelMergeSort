@@ -12,7 +12,7 @@ package body Msort is
         loop
             select
                 accept start(Arr: in out t_Array; low: Index; high: Index) do
-                    task_call(Arr, low, high);
+                    mergesort(Arr, low, high);
                 end start;
                 or
                     terminate;
@@ -20,21 +20,20 @@ package body Msort is
         end loop;
     end t_sort;
 
-    procedure task_caller(Arr: in out t_Array; low: Index; mid: Index; high: Index) is
+    procedure call_t_sort(Arr: in out t_Array; low: Index; mid: Index; high: Index) is
     leftsort:t_sort;
     rightsort:t_sort;
     begin
-        -- call task
         leftsort.start(Arr, low, mid);
         rightsort.start(Arr, mid+1, high);
-    end task_caller;
+    end call_t_sort;
 
-    procedure task_call(Arr: in out t_Array; low: Index; high: Index) is
+    procedure mergesort(Arr: in out t_Array; low: Index; high: Index) is
     middle : Index;
     begin
         if low + 1 <= high then
             middle := (high+low)/2;
-            task_caller(Arr, low, middle, high);
+            call_t_sort(Arr, low, middle, high);
             declare
                 Left: t_Array(low .. middle) := Arr(low .. middle);
                 Right: t_Array(middle+1 .. high) := Arr(middle+1 .. high);
@@ -42,11 +41,11 @@ package body Msort is
                 Arr(low .. high) := merge(Left, Right);
             end;
         end if;
-    end task_call;
+    end mergesort;
 
     procedure sort(Arr: in out t_Array; low: Index; high: Index) is
     begin
-        task_call(Arr, low, high);
+        mergesort(Arr, low, high);
     end sort;
 
     function merge(Left: t_Array; Right: t_Array) return t_Array is
