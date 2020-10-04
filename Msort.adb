@@ -3,28 +3,53 @@ use Text_IO;
 
 package body Msort is
 
-    procedure sort(Arr: in out t_Array; low: Index; high: Index) is
-        package Int_IO is new Integer_IO(Integer);
-        use Int_IO;
-        middle: Index;
+    task type t_sort is
+        entry start(Arr: in out t_Array; low: Index; high: Index);
+    end t_sort;
+
+    task body t_sort is
+    begin
+        loop
+            select
+                accept start(Arr: in out t_Array; low: Index; high: Index) do
+                    task_call(Arr, low, high);
+                end start;
+                or
+                    terminate;
+            end select;
+        end loop;
+    end t_sort;
+
+    procedure task_caller(Arr: in out t_Array; low: Index; mid: Index; high: Index) is
+    leftsort:t_sort;
+    rightsort:t_sort;
+    begin
+        -- call task
+        leftsort.start(Arr, low, mid);
+        rightsort.start(Arr, mid+1, high);
+    end task_caller;
+
+    procedure task_call(Arr: in out t_Array; low: Index; high: Index) is
+    middle : Index;
     begin
         if low + 1 <= high then
             middle := (high+low)/2;
+            task_caller(Arr, low, middle, high);
             declare
-                Left: t_Array(Arr'First .. middle) := Arr(Arr'First .. middle);
-                Right: t_Array(middle+1 .. Arr'Last) := Arr(middle+1 .. Arr'Last);
+                Left: t_Array(low .. middle) := Arr(low .. middle);
+                Right: t_Array(middle+1 .. high) := Arr(middle+1 .. high);
             begin
-                sort(Left, Arr'First, middle);
-                sort(Right, middle+1, Arr'Last);
-                Arr := merge(Left, Right);
+                Arr(low .. high) := merge(Left, Right);
             end;
         end if;
+    end task_call;
+
+    procedure sort(Arr: in out t_Array; low: Index; high: Index) is
+    begin
+        task_call(Arr, low, high);
     end sort;
 
     function merge(Left: t_Array; Right: t_Array) return t_Array is
-        package Int_IO is new Integer_IO(Integer);
-        use Int_IO;
-
         left_i: Integer := Integer(Left'First);
         right_i: Integer := Integer(Right'First);
         arr_i: Integer := Integer(Left'First);
