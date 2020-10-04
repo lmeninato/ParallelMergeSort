@@ -7,12 +7,6 @@ procedure Main is
     use Int_IO;
     use Msort;
 
-
-    --LENGTH: constant Integer := 40;
-    --type t_Int is range -300 .. 300;
-    --type Index is range 1 .. LENGTH;
-    --type t_Array is array (Index) of t_Int;
-
     val: Integer;
     Arr: t_Array (Index(1) .. Index(LENGTH));
 
