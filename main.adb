@@ -8,10 +8,12 @@ procedure Main is
     use Msort;
 
     val: Integer;
+    count: Integer := 0;
     Arr: t_Array (Index(1) .. Index(LENGTH));
 
     task Printer is
         entry Start;
+        entry PrintSumStart;
     end Printer;
 
     task body Printer is
@@ -20,6 +22,8 @@ procedure Main is
         for i in Arr'Range loop
             Put_Line(t_Int'Image (Arr(i)));
         end loop;
+        accept PrintSumStart;
+        Put_Line(Integer'Image (count));
     end Printer;
 
     task Sum is
@@ -27,11 +31,10 @@ procedure Main is
     end Sum;
 
     task body Sum is
-        count : Integer := 0;
     begin
         accept Start;
         for i in Arr'Range loop
-            count := Integer(Arr(i));
+            count := count + Integer(Arr(i));
         end loop;
     end Sum;
 
@@ -43,6 +46,7 @@ procedure Main is
             Get(val);
             Arr(i) := t_Int(val);
         end loop;
+        Printer.PrintSumStart;
     end Reader;
 
 begin
