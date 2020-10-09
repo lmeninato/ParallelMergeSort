@@ -3,7 +3,9 @@ for i in {1..50}
 do
     python3 generate_rand.py > rand.txt
     ./main < rand.txt > sorted.txt
-    python3 check_sorted.py < sorted.txt
+    python3 check_sorted.py < sorted.txt > test_out.txt
+    python3 test.py
 done
 rm rand.txt
 rm sorted.txt
+rm test_out.txt

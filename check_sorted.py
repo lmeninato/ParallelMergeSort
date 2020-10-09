@@ -1,7 +1,10 @@
 import sys
 nums = []
 for line in sys.stdin:
-    nums.append(int(line))
+    for val in line.split(" "):
+        if val in ["", "\n"]:
+            continue
+        nums.append(int(val))
 last = nums[-1]
 if nums[:-1] == sorted(nums[:-1]):
     print("Array is sorted")

@@ -20,8 +20,9 @@ procedure Main is
     begin
         accept Start;
         for i in Arr'Range loop
-            Put_Line(t_Int'Image (Arr(i)));
+            Put(t_Int'Image (Arr(i)) & " ");
         end loop;
+        new_line;
         accept PrintSumStart;
         Put_Line(Integer'Image (count));
     end Printer;
